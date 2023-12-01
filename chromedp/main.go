@@ -12,12 +12,10 @@ import (
 	"github.com/phprao/go-pdf/util"
 )
 
-var baseDir = "F:/jx/20231114_4359/periodical/resource/epub"
-
-// baseDir+"/epub2/165/165-310073349/165_310073349/310073349_d81add70.epub"
-
-func Run() {
-	dir := baseDir
+// 完整路径：F:/jx/20231114_4359/periodical/resource/epub/epub2/165/165-310073349/165_310073349/310073349_d81add70.epub
+// root：F:/jx/20231114_4359/periodical/resource
+func Run(root string, ch chan util.Msg) {
+	dir := root + "/epub"
 
 	tarGzFiles, err := util.FindTarGzFile(dir)
 	if err != nil {
@@ -26,9 +24,17 @@ func Run() {
 
 	for _, v := range tarGzFiles {
 		if err := ProcessTarGzFile(v); err != nil {
-			log.Panicln(v, ": ", err)
+			ch <- util.Msg{
+				SourceFile: v,
+				DstFile:    strings.Replace(v, "tar.gz", "pdf", 1),
+				Status:     "failed: " + err.Error(),
+			}
 		} else {
-
+			ch <- util.Msg{
+				SourceFile: v,
+				DstFile:    strings.Replace(v, "tar.gz", "pdf", 1),
+				Status:     "success",
+			}
 		}
 	}
 }
@@ -78,7 +84,7 @@ func ProcessTarGzFile(filename string) error {
 		return err
 	}
 
-	// os.Remove(filename)
+	os.Remove(filename)
 	os.RemoveAll(dstdir)
 
 	return nil

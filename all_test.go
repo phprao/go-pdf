@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/phprao/ColorOutput"
 	"github.com/phprao/go-pdf/chromedp"
 	"github.com/phprao/go-pdf/unipdf"
 	"github.com/phprao/go-pdf/util"
@@ -112,4 +113,19 @@ func TestJPG(t *testing.T) {
 func TestEPUB(t *testing.T) {
 	chromedp.ProcessTarGzFile("F:/jx/20231114_4359/periodical/resource/epub/epub2/165/165-310073349/165_310073349.tar.gz")
 	// chromedp.Run()
+}
+
+func TestColor(t *testing.T) {
+	ColorOutput.Colorful.WithFrontColor("red").Println("test")
+}
+
+func TestFind(t *testing.T) {
+	tarGzFiles, err := util.FindTarGzFile("F:/jx/20231114_4359/periodical/resource/epub")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, v := range tarGzFiles {
+		fmt.Println(v)
+	}
 }

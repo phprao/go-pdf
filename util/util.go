@@ -1084,17 +1084,22 @@ func DeCompressTar() {
 
 }
 
-func FindTarGzFile(dir string) (tarGzFiles []string, err error) {
+func FindTarGzFile(dir string) (res []string, err error) {
 	fs, err := os.ReadDir(dir)
 	if err != nil {
-		return tarGzFiles, err
+		return res, err
 	}
-	tarGzFiles = make([]string, 0)
+
+	res = make([]string, 0)
+
 	for _, f := range fs {
 		if f.IsDir() {
-			FindTarGzFile(dir + "/" + f.Name())
+			r, _ := FindTarGzFile(dir + "/" + f.Name())
+			if len(r) > 0 {
+				res = append(res, r...)
+			}
 		} else {
-			tarGzFiles = append(tarGzFiles, dir+"/"+f.Name())
+			res = append(res, dir+"/"+f.Name())
 		}
 	}
 
