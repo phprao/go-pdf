@@ -45,6 +45,7 @@ func ProcessTarGzFile(filename string) error {
 
 	// 临时文件都放到这里，方便后面删除
 	dstdir = dstdir + "/source"
+	os.RemoveAll(dstdir)
 	if err := os.Mkdir(dstdir, 0755); err != nil {
 		return err
 	}

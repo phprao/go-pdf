@@ -899,21 +899,20 @@ func DeCompressZip(zipFile, dest string) error {
 		}
 		defer rc.Close()
 		filename := dest + file.Name
-		fmt.Println(filename)
-		// err = os.MkdirAll(getDir(filename), 0755)
-		// if err != nil {
-		// 	return err
-		// }
-		// w, err := os.Create(filename)
-		// if err != nil {
-		// 	return err
-		// }
-		// defer w.Close()
-		// _, err = io.Copy(w, rc)
-		// if err != nil {
-		// 	return err
-		// }
-		// w.Close()
+		err = os.MkdirAll(getDir(filename), 0755)
+		if err != nil {
+			return err
+		}
+		w, err := os.Create(filename)
+		if err != nil {
+			return err
+		}
+		defer w.Close()
+		_, err = io.Copy(w, rc)
+		if err != nil {
+			return err
+		}
+		w.Close()
 		rc.Close()
 	}
 	return nil
@@ -1099,7 +1098,9 @@ func FindTarGzFile(dir string) (res []string, err error) {
 				res = append(res, r...)
 			}
 		} else {
-			res = append(res, dir+"/"+f.Name())
+			if strings.Contains(f.Name(), ".tar.gz") {
+				res = append(res, dir+"/"+f.Name())
+			}
 		}
 	}
 
