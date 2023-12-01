@@ -10,7 +10,9 @@ import (
 
 	"github.com/phprao/ColorOutput"
 	"github.com/phprao/go-pdf/chromedp"
-	"github.com/phprao/go-pdf/unipdf"
+	"github.com/phprao/go-pdf/epub"
+	"github.com/phprao/go-pdf/jpg"
+	"github.com/phprao/go-pdf/pdfcpu"
 	"github.com/phprao/go-pdf/util"
 )
 
@@ -42,17 +44,15 @@ func TestHash(t *testing.T) {
 }
 
 func TestImagesToPDF(t *testing.T) {
-	outputPath := "unipdf/output.pdf"
+	outputPath := "F:/jx/20231114_4359/periodical/resource/jpg/jpage3/41287/41287-358053/output.pdf"
 	inputPaths := []string{
-		"unipdf/images/0b8e3474_big.jpg",
-		"unipdf/images/0b972606_big.jpg",
-		"unipdf/images/0bbefa12_big.jpg",
-		"unipdf/images/0c3b1e96_big.jpg",
-		"unipdf/images/0e4abc46_big.jpg",
-		"unipdf/images/01d3b323_big.jpg",
+		"F:/jx/20231114_4359/periodical/resource/jpg/jpage3/41287/41287-358053/source/0b8e3474_big.jpg",
+		"F:/jx/20231114_4359/periodical/resource/jpg/jpage3/41287/41287-358053/source/0b972606_big.jpg",
+		"F:/jx/20231114_4359/periodical/resource/jpg/jpage3/41287/41287-358053/source/0bf817d2_big.jpg",
+		"F:/jx/20231114_4359/periodical/resource/jpg/jpage3/41287/41287-358053/source/0c3b1e96_big.jpg",
 	}
 
-	err := unipdf.ImagesToPdf(inputPaths, outputPath)
+	err := pdfcpu.ImagesToPdf(inputPaths, outputPath)
 	if err != nil {
 		log.Printf("Error: %v\n", err)
 		os.Exit(1)
@@ -79,19 +79,19 @@ func TestSort(t *testing.T) {
 		"OEBPS/Text/Cover.xhtml",
 		"OEBPS/Text/Chapter_2_5.xhtml",
 	}
-	sort.Stable(chromedp.SortStringSliceIncrement(htmls))
+	sort.Stable(epub.SortStringSliceIncrement(htmls))
 
 	fmt.Println(htmls)
 }
 
 func TestMerge(t *testing.T) {
-	pdffile := "F:/jx/20231114_4359/periodical/resource/epub/epub2/165/165-310073349/165_310073349_2.pdf"
+	pdffile := "F:/jx/20231114_4359/periodical/resource/epub/epub2/1158/1158-310040882/165_310073349_2.pdf"
 	var htmls = []string{
-		"F:/jx/20231114_4359/periodical/resource/epub/epub2/165/165-310073349/source/Chapter_1_1.pdf",
-		"F:/jx/20231114_4359/periodical/resource/epub/epub2/165/165-310073349/source/Cover.pdf",
-		"F:/jx/20231114_4359/periodical/resource/epub/epub2/165/165-310073349/source/Chapter_2_5.pdf",
+		"F:/jx/20231114_4359/periodical/resource/epub/epub2/1158/1158-310040882/source/Chapter_1_1.pdf",
+		"F:/jx/20231114_4359/periodical/resource/epub/epub2/1158/1158-310040882/source/Cover.pdf",
+		"F:/jx/20231114_4359/periodical/resource/epub/epub2/1158/1158-310040882/source/Chapter_2_1.pdf",
 	}
-	if err := unipdf.MergePdf(htmls, pdffile); err != nil {
+	if err := pdfcpu.MergePdf(htmls, pdffile); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -105,13 +105,13 @@ func TestHtmlToPdf(t *testing.T) {
 
 // go test -timeout 5m -v -run TestJPG
 func TestJPG(t *testing.T) {
-	unipdf.ProcessTarGzFile("F:/jx/20231114_4359/periodical/resource/jpg/jpage3/41287/41287-358053/41287_358053.tar.gz")
+	jpg.ProcessTarGzFile("F:/jx/20231114_4359/periodical/resource/jpg/jpage3/41287/41287-358053/41287_358053.tar.gz")
 	// unipdf.Run()
 }
 
 // go test -timeout 5m -v -run TestEPUB
 func TestEPUB(t *testing.T) {
-	chromedp.ProcessTarGzFile("F:/jx/20231114_4359/periodical/resource/epub/epub2/165/165-310073349/165_310073349.tar.gz")
+	epub.ProcessTarGzFile("F:/jx/20231114_4359/periodical/resource/epub/epub2/165/165-310073349/165_310073349.tar.gz")
 	// chromedp.Run()
 }
 

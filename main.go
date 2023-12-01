@@ -12,9 +12,8 @@ import (
 	"path/filepath"
 
 	"github.com/phprao/ColorOutput"
-	"github.com/phprao/go-pdf/chromedp"
-
-	"github.com/phprao/go-pdf/unipdf"
+	"github.com/phprao/go-pdf/epub"
+	"github.com/phprao/go-pdf/jpg"
 	"github.com/phprao/go-pdf/util"
 )
 
@@ -33,13 +32,13 @@ func main() {
 
 	go func() {
 		wg.Add(1)
-		chromedp.Run(root, ch)
+		epub.Run(root, ch)
 		wg.Done()
 	}()
 
 	go func() {
 		wg.Add(1)
-		unipdf.Run(root, ch)
+		jpg.Run(root, ch)
 		wg.Done()
 	}()
 

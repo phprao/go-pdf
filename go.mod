@@ -7,7 +7,16 @@ require (
 	github.com/satori/go.uuid v1.2.0
 )
 
-require github.com/gogf/gf v1.15.4 // indirect
+require (
+	github.com/gogf/gf v1.15.4 // indirect
+	github.com/hhrutter/lzw v1.0.0 // indirect
+	github.com/hhrutter/tiff v1.0.1 // indirect
+	github.com/mattn/go-runewidth v0.0.15 // indirect
+	github.com/pdfcpu/pdfcpu v0.5.0 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
+	github.com/rivo/uniseg v0.4.4 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
+)
 
 require (
 	github.com/chromedp/cdproto v0.0.0-20231126232103-8e31ff06e23b
