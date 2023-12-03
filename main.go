@@ -29,15 +29,14 @@ func main() {
 	root := strings.TrimRight(strings.ReplaceAll(args[1], "\\", "/"), "/")
 
 	ch := make(chan util.Msg, 0)
+	wg.Add(2)
 
 	go func() {
-		wg.Add(1)
 		epub.Run(root, ch)
 		wg.Done()
 	}()
 
 	go func() {
-		wg.Add(1)
 		jpg.Run(root, ch)
 		wg.Done()
 	}()
@@ -57,9 +56,8 @@ func main() {
 
 func PrintMsg(root string, ch chan util.Msg) {
 	logfile := root + "/logs.log"
-	os.Remove(logfile)
 
-	f, err := os.OpenFile(logfile, os.O_CREATE|os.O_RDWR, 0755)
+	f, err := os.OpenFile(logfile, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0755)
 	if err != nil {
 		log.Println("日志文件创建失败：" + logfile)
 		return
@@ -67,7 +65,7 @@ func PrintMsg(root string, ch chan util.Msg) {
 	defer f.Close()
 
 	for msg := range ch {
-		str := fmt.Sprintf("%s ---> %s ---> %s", msg.SourceFile, msg.DstFile, msg.Status)
+		str := fmt.Sprintf("[%s] %s ---> %s ---> %s", time.Now().Format(util.DATE_FORMAT_SECOND), msg.SourceFile, msg.DstFile, msg.Status)
 		io.WriteString(f, str+"\n")
 
 		if msg.Status != "success" {

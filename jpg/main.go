@@ -43,9 +43,10 @@ func ProcessTarGzFile(filename string) error {
 
 	// 临时文件都放到这里，方便后面删除
 	dstdir = dstdir + "/source"
-	os.RemoveAll(dstdir)
-	if err := os.Mkdir(dstdir, 0755); err != nil {
-		return err
+	if _, err := os.Stat(dstdir); err == os.ErrNotExist {
+		if err := os.Mkdir(dstdir, 0755); err != nil {
+			return err
+		}
 	}
 
 	// 解压
@@ -81,14 +82,22 @@ func sortByName(filenames []string, iid int64, rid int64, dstDir string) (dst []
 		return
 	}
 
-	dst = make([]string, len(filenames))
+	// 兼容处理
+	tmp := make([]string, 2*len(filenames))
 
 	for _, h := range filenames {
 		str := strings.Replace(h, "_big.jpg", "", 1)
 		for k := range data {
 			if str == data[k].Hash {
-				dst[data[k].Page-1] = dstDir + "/" + h
+				tmp[data[k].Page-1] = dstDir + "/" + h
 			}
+		}
+	}
+
+	dst = make([]string, 0)
+	for _, v := range tmp {
+		if v != "" {
+			dst = append(dst, v)
 		}
 	}
 

@@ -1136,10 +1136,20 @@ func UnTarEpubFile(epubFile string, dstDir string) (htmls []string, err error) {
 		if err != nil {
 			return htmls, err
 		}
+	}
 
-		if strings.Contains(f.Name, ".html") || strings.Contains(f.Name, ".xhtml") {
-			htmls = append(htmls, f.Name)
-		}
+	// 解析 directories.json 文件，里面包含了目录信息，对 xhtml 已经做了排序
+	dictFile, _ := os.Open(dstDir+"/directories.json")
+	defer dictFile.Close()
+	dictBt, _ := io.ReadAll(dictFile)
+
+	var dic Directory
+	err = json.Unmarshal(dictBt, &dic)
+	if err != nil {
+		return htmls, err
+	}
+	for _, sp := range dic.Spine {
+		htmls = append(htmls, sp.Src)
 	}
 
 	return
