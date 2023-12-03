@@ -51,7 +51,7 @@ func main() {
 
 	time.Sleep(3 * time.Second)
 
-	log.Println("done.")
+	log.Println(fmt.Sprintf("[%s] done.", time.Now().Format(util.DATE_FORMAT_SECOND)))
 }
 
 func PrintMsg(root string, ch chan util.Msg) {

@@ -1139,7 +1139,7 @@ func UnTarEpubFile(epubFile string, dstDir string) (htmls []string, err error) {
 	}
 
 	// 解析 directories.json 文件，里面包含了目录信息，对 xhtml 已经做了排序
-	dictFile, _ := os.Open(dstDir+"/directories.json")
+	dictFile, _ := os.Open(dstDir + "/directories.json")
 	defer dictFile.Close()
 	dictBt, _ := io.ReadAll(dictFile)
 
@@ -1149,7 +1149,10 @@ func UnTarEpubFile(epubFile string, dstDir string) (htmls []string, err error) {
 		return htmls, err
 	}
 	for _, sp := range dic.Spine {
-		htmls = append(htmls, sp.Src)
+		// 有时候目录中的文件实际上不存在
+		if _, err := os.Stat(dstDir + "/" + sp.Src); err == nil {
+			htmls = append(htmls, sp.Src)
+		}
 	}
 
 	return
