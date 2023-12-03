@@ -1026,10 +1026,6 @@ func DeCompressTarGz(filename string, dstDir string, mode int) (filenames []stri
 	// tar read
 	tr := tar.NewReader(gr)
 
-	if !strings.HasSuffix(dstDir, "/") {
-		dstDir = dstDir + "/"
-	}
-
 	filenames = make([]string, 0)
 
 	// 读取文件
@@ -1107,7 +1103,7 @@ func FindTarGzFile(dir string) (res []string, err error) {
 	return
 }
 
-func UnTarEpubFile(epubFile string, dstDir string) (htmls []string, err error) {
+func UnZipEpubFile(epubFile string, dstDir string) (htmls []string, err error) {
 	file, _ := os.Open(epubFile)
 	defer file.Close()
 

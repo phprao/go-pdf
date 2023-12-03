@@ -44,20 +44,20 @@ func ProcessTarGzFile(filename string) error {
 
 	// 临时文件都放到这里，方便后面删除
 	dstdir = dstdir + "/source"
-	if _, err := os.Stat(dstdir); err == os.ErrNotExist {
+	if _, err := os.Stat(dstdir); os.IsNotExist(err) {
 		if err := os.Mkdir(dstdir, 0755); err != nil {
 			return err
 		}
 	}
-	
+
 	// 解压tar.gz，得到一个epub文件和一个jpg封面文件
 	filenames, err := util.DeCompressTarGz(filename, dstdir, 2)
 	if err != nil {
 		return err
 	}
 
-	// 解压epub
-	htmls, err := util.UnTarEpubFile(dstdir+"/"+filenames[0], dstdir)
+	// zip解压epub
+	htmls, err := util.UnZipEpubFile(dstdir+"/"+filenames[0], dstdir)
 	if err != nil {
 		return err
 	}
